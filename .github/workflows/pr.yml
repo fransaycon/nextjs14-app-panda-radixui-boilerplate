@@ -1,0 +1,28 @@
+name: Pull Request Actions
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Set Node.js 18.17
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.17
+          cache: 'pnpm'
+      - name: Install everything!
+        run: pnpm install
+      - name: Setup panda
+        run: pnpm run codegen
+      - name: Lint and Type Checks
+        run: pnpm run ci
